@@ -15,26 +15,39 @@ window.onload = function () {
     var mov_y;
     var color_snake = '#0000ff';
     var color_bg = '#ffffff';   //color of the background
+    var color_apple = '#00b60a';
+    var apple = false;  //is there an apple on the field ?
+    var lg_box_x;   //how many positions on x axis
+    var lg_box_y;   //how many positions on y axis
+    var posa_x; //where the apple is
+    var posa_y;
+    var bigger_snake = false; //should the last element of snake move? (ie same length)
+
 
     function init() {
         canvas = document.createElement('canvas');
         canvas.width = 600;
-        canvas.height = 600;
+        canvas.height = 20;
         canvas.style.border = "2px solid";
         document.body.appendChild(canvas);
         ctx = canvas.getContext('2d');
         ctx.fillStyle = color_snake;
-        pos_x = 21,pos_y = 21;    //where is initialy placed the snake
-        lg_x = 19,lg_y = 19;     //the size of a part of the snake
-        mov_x = Math.floor((pos_x + lg_x)/2);   //how much will the head move of on the x axis
-        mov_y = Math.floor((pos_y + lg_y)/2);   //how much will the head move of on the y axis
+        pos_x = 41,pos_y = 1;    //where is initialy placed the snake
+        lg_x = 18,lg_y = 18;     //the size of a part of the snake
+        mov_x = 20 //Math.floor((pos_x + lg_x)/2);   //how much will the head move of on the x axis
+        mov_y = 20 //Math.floor((pos_y + lg_y)/2);   //how much will the head move of on the y axis
         ctx.fillRect(pos_x,pos_x,lg_x,lg_y);
         snake=[[pos_x,pos_y]];
+        lg_box_x = Math.floor(canvas.width / mov_x);
+        lg_box_y = Math.floor(canvas.height / mov_y);
     }
     
     function update_snake() {
-        ctx.fillStyle = color_bg;   //we erase the end of the snake
-        ctx.fillRect(pos_x,pos_y,snake[lgth_snake-1][0],snake[lgth_snake-1][1]);
+        if (!bigger_snake) {
+            ctx.fillStyle = color_bg;   //we erase the end of the snake
+            ctx.fillRect(snake[lgth_snake - 1][0], snake[lgth_snake - 1][1], lg_x, lg_y);
+        }
+        else bigger_snake = false;
         var i;
         for (i=lgth_snake-1; i>0; i--) {    //we put the block n at the place of n-1
             snake[i] = snake[i-1];
@@ -57,8 +70,21 @@ window.onload = function () {
         ctx.fillRect(snake[0][0],snake[0][1],lg_x,lg_y);  //we draw the new head of the snake
     }
 
+    function create_apple() {
+        var rdx = Math.random();
+        var rdy = Math.random();
+        posa_x = 1 + mov_x * Math.floor(rdx * lg_box_x);
+        posa_y = 1 + mov_y * Math.floor(rdy * lg_box_y);
+        ctx.fillStyle = color_apple;
+        ctx.fillRect(posa_x,posa_y,lg_x,lg_y);
+        apple = true;
+    }
+
     function apple_eaten() {//TODO:INCREASE LENGTH, ADD A NEW RECT, UPDATE SNAKE AND CTX
-        return null;
+        ctx.fillStyle = color_snake;
+        ctx.fillRect(posa_x,posa_y,lg_x,lg_y);
+        apple = false;
+        bigger_snake = true;
     }
 
     function sleep(ms) {    //used to update the snake when we need to
@@ -68,13 +94,15 @@ window.onload = function () {
     var i = 0;
 
     async function start_game() {
-        while (i<10) {
-
+        while (i<lg_box_x) {
+            if (!apple) create_apple();
             await sleep(slp);
             update_snake();
             i++;
+            if ((posa_x == snake[0][0]) && (posa_y == snake[0][1])) apple_eaten();
         }
     }
+
     init();
     start_game();
 }
