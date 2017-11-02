@@ -42,12 +42,11 @@ window.onload = function () {
         lg_x = 18,lg_y = 18;     //the size of a part of the snake
         mov_x = 20 //Math.floor((pos_x + lg_x)/2);   //how much will the head move of on the x axis
         mov_y = 20 //Math.floor((pos_y + lg_y)/2);   //how much will the head move of on the y axis
-        ctx.fillRect(pos_x,pos_x,lg_x,lg_y);
         snake=[[pos_x,pos_y]];
         lg_box_x = Math.floor(canvas.width / mov_x);
         lg_box_y = Math.floor(canvas.height / mov_y);
     }
-    
+     
     function update_snake() {
         if (!bigger_snake) {
             ctx.fillStyle = color_bg;   //we erase the end of the snake
@@ -109,7 +108,7 @@ window.onload = function () {
     var i = 0;
 
     async function start_game() {
-        while (i<lg_box_x) {
+        while (i<100*lg_box_x) {
             if (!apple) create_apple();
             if ((posa_x == snake[0][0]) && (posa_y == snake[0][1])) apple_eaten();
             update_snake();
