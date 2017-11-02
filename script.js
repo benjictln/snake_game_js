@@ -98,6 +98,7 @@ window.onload = function () {
         ctx.fillRect(posa_x,posa_y,lg_x,lg_y);
         apple = false;
         bigger_snake = true;
+        document.getElementById("score").innerHTML = lgth_snake + 1;
 
     }
 
