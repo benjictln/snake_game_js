@@ -5,7 +5,7 @@ window.onload = function () {
     var dir = 0;    //where the snake is heading 0:right 1:down 2:left 3:up
     var canvas; //the size of the main window where the snake will move
     var ctx;    //the snake
-    var slp = 100; //the refreshing rate (in ms)
+    var slp = 300; //the refreshing rate (in ms)
     var snake = new Array();
     var pos_x;
     var pos_y;
@@ -23,11 +23,17 @@ window.onload = function () {
     var posa_y;
     var bigger_snake = false; //should the last element of snake move? (ie same length)
 
+    function init_keys() {
+        document.getElementById("up").addEventListener("click", moveUp);
+        document.getElementById("down").addEventListener("click", moveDown);
+        document.getElementById("left").addEventListener("click", moveLeft);
+        document.getElementById("right").addEventListener("click", moveRight);
+    }
 
     function init() {
         canvas = document.createElement('canvas');
-        canvas.width = 600;
-        canvas.height = 20;
+        canvas.width = 400;
+        canvas.height = 400;
         canvas.style.border = "2px solid";
         document.body.appendChild(canvas);
         ctx = canvas.getContext('2d');
@@ -65,13 +71,13 @@ window.onload = function () {
                 snake[0] = [ snake[0][0] + mov_x, snake[0][1] ];
             break;
             case 1:
-                snake[0] = [ snake[0][0], snake[0][1] - mov_y];
+                snake[0] = [ snake[0][0], snake[0][1] + mov_y];
             break;
             case 2:
                 snake[0] = [ snake[0][0] - mov_x ,snake[0][1] ];
                 break;
             default:
-                snake[0] = [ snake[0][0], snake[0][1] + mov_y];
+                snake[0] = [ snake[0][0], snake[0][1] - mov_y];
                 break;
         }
         ctx.fillStyle = color_snake;
@@ -112,6 +118,28 @@ window.onload = function () {
         }
     }
 
+    init_keys();
     init();
     start_game();
+
+    function moveUp() {
+        dir = 3;
+        //console.log('moveup')
+    }
+
+    function moveDown() {
+        dir = 1;
+        //console.log('movedown')
+    }
+
+    function moveLeft() {
+        dir = 2;        //myGamePiece.speedY -= 1;
+
+        //console.log('moveleft')
+    }
+
+    function moveRight() {
+        dir = 0;
+        //console.log('moveright')
+    }
 }
