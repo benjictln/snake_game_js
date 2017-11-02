@@ -5,7 +5,7 @@ window.onload = function () {
     var dir = 0;    //where the snake is heading 0:right 1:down 2:left 3:up
     var canvas; //the size of the main window where the snake will move
     var ctx;    //the snake
-    var slp = 1000; //the refreshing rate (in ms)
+    var slp = 100; //the refreshing rate (in ms)
     var snake = new Array();
     var pos_x;
     var pos_y;
@@ -46,12 +46,20 @@ window.onload = function () {
         if (!bigger_snake) {
             ctx.fillStyle = color_bg;   //we erase the end of the snake
             ctx.fillRect(snake[lgth_snake - 1][0], snake[lgth_snake - 1][1], lg_x, lg_y);
+            for (i=lgth_snake-1; i>0; i--) {    //we put the block n at the place of n-1
+                snake[i] = snake[i-1];
+            }
         }
-        else bigger_snake = false;
+        else {
+            bigger_snake = false;
+            snake.push(snake[lgth_snake-1]);
+            for (i=lgth_snake-1; i>0; i--) {    //we put the block n at the place of n-1
+                snake[i] = snake[i-1];
+            }
+            lgth_snake++;
+        }
         var i;
-        for (i=lgth_snake-1; i>0; i--) {    //we put the block n at the place of n-1
-            snake[i] = snake[i-1];
-        }
+
         switch (dir) { //we treat the head differently
             case 0:
                 snake[0] = [ snake[0][0] + mov_x, snake[0][1] ];
@@ -85,6 +93,7 @@ window.onload = function () {
         ctx.fillRect(posa_x,posa_y,lg_x,lg_y);
         apple = false;
         bigger_snake = true;
+
     }
 
     function sleep(ms) {    //used to update the snake when we need to
@@ -96,10 +105,10 @@ window.onload = function () {
     async function start_game() {
         while (i<lg_box_x) {
             if (!apple) create_apple();
-            await sleep(slp);
+            if ((posa_x == snake[0][0]) && (posa_y == snake[0][1])) apple_eaten();
             update_snake();
             i++;
-            if ((posa_x == snake[0][0]) && (posa_y == snake[0][1])) apple_eaten();
+            await sleep(slp);
         }
     }
 
