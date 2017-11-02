@@ -68,15 +68,27 @@ window.onload = function () {
         switch (dir) { //we treat the head differently
             case 0:
                 snake[0] = [ snake[0][0] + mov_x, snake[0][1] ];
-            break;
+                if (snake[0][0] > canvas.width) {
+                    snake[0][0] -= canvas.width;
+                }
+                break;
             case 1:
                 snake[0] = [ snake[0][0], snake[0][1] + mov_y];
-            break;
+                if (snake[0][1] > canvas.height) {
+                    snake[0][1] -= canvas.height;
+                }
+                break;
             case 2:
                 snake[0] = [ snake[0][0] - mov_x ,snake[0][1] ];
+                if (snake[0][0] < 0) {
+                    snake[0][0] += canvas.width;
+                }
                 break;
             default:
                 snake[0] = [ snake[0][0], snake[0][1] - mov_y];
+                if (snake[0][1] < 0) {
+                    snake[0][1] += canvas.height;
+                }
                 break;
         }
         ctx.fillStyle = color_snake;
