@@ -30,6 +30,13 @@ window.onload = function () {
         document.getElementById("right").addEventListener("click", moveRight);
     }*/
 
+    function init_mode() {
+        document.getElementById('easy').onclick = easyMode;
+        document.getElementById('medium').onclick = mediumMode;
+        document.getElementById('hard').onclick = hardMode;
+        document.getElementById('extreme').onclick = extremeMode;
+    }
+
     function init() {
         canvas = document.createElement('canvas');
         canvas.width = 600;
@@ -136,6 +143,7 @@ window.onload = function () {
     }
 
     //init_keys();  now useless
+    init_mode();
     init();
     start_game();
 
@@ -160,6 +168,11 @@ window.onload = function () {
         //console.log('moveright')
     }
 
+
+    /**
+     * This block is to use the keyboard to control the snake
+     * @type {Element}
+     */
     var body = document.querySelector('body');
     body.onkeydown = function (e) {
         var nb_key = e.keyCode;
@@ -181,4 +194,20 @@ window.onload = function () {
                 break;
         }
     };
+
+    function easyMode() {
+        slp = 1000;
+        console.log('easy mode');
+    }
+    function mediumMode() {
+        slp = 300;
+        console.log('medium mode');
+    }
+    function hardMode() {
+        slp = 100;
+    }
+    function extremeMode() {
+        slp = 30;
+    }
+
 }
