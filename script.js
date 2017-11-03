@@ -16,13 +16,17 @@ window.onload = function () {
     var color_snake = '#0000ff';
     var color_bg = '#ffffff';   //color of the background
     var color_apple = '#00b60a';
+    var color_rotten_apple = '#ff0000';
     var apple = false;  //is there an apple on the field ?
     var lg_box_x;   //how many positions on x axis
     var lg_box_y;   //how many positions on y axis
     var posa_x; //where the apple is
     var posa_y;
+    var posr_x; //where the rotten apple is
+    var posr_y;
     var bigger_snake = false; //should the last element of snake move? (ie same length)
-
+    var nb_rooten_apple = 0;
+    var rooten_apple_array = new Array();
     /*function init_keys() {
         document.getElementById("up").addEventListener("click", moveUp);
         document.getElementById("down").addEventListener("click", moveDown);
@@ -117,17 +121,41 @@ window.onload = function () {
         apple = true;
     }
 
-    function apple_eaten() {//TODO:INCREASE LENGTH, ADD A NEW RECT, UPDATE SNAKE AND CTX
+    function apple_eaten() {
         ctx.fillStyle = color_snake;
         ctx.fillRect(posa_x,posa_y,lg_x,lg_y);
         apple = false;
         bigger_snake = true;
         document.getElementById("score").innerHTML = lgth_snake + 1;
+    }
 
+    function rooten_apple() {
+        posr_x = mov_x * Math.floor((Math.random()) * lg_box_x);
+        posr_y = mov_y * Math.floor((Math.random()) * lg_box_y);
+        ctx.fillStyle = color_rotten_apple;
+        ctx.fillRect(posr_x,posr_y,lg_x,lg_y);
+        nb_rooten_apple++;
+    }
+
+    function create_rooten_apple() {
+        if (lgth_snake < 3) return null;
+        if (lgth_snake < 10) {
+            if(Math.random() < 0.01 && nb_rooten_apple < 4) rooten_apple();
+            return
+        }
+        if (lgth_snake < 20) {
+            if (Math.random() < 0.03 && nb_rooten_apple << 15) rooten_apple();
+            return
+        }
+        if (lgth_snake < 30) {
+            if (Math.random() < 0.10 && nb_rooten_apple << 60) rooten_apple();
+            return;
+        }
+        if (Math.random() < (1 - nb_rooten_apple/100)) rooten_apple();
     }
 
     function sleep(ms) {    //used to update the snake when we need to
-        return new Promise(resolve => setTimeout(resolve, ms));
+        return new Promise(resolve => setTimeout(resolve , ms));
     }
 
     var i = 0;
@@ -139,6 +167,7 @@ window.onload = function () {
             update_snake();
             i++;
             await sleep(slp);
+            create_rooten_apple();
         }
     }
 
@@ -181,27 +210,25 @@ window.onload = function () {
         }
         switch (nb_key) {
             case 37:
-                moveLeft();
+                if (dir == 1 || dir == 3) moveLeft();
                 break;
             case 38:
-                moveUp();
+                if (dir == 0 || dir == 2) moveUp();
                 break;
             case 39:
-                moveRight();
+                if (dir == 1 || dir == 3) moveRight();
                 break;
             case 40:
-                moveDown();
+                if (dir == 0 || dir == 2) moveDown();
                 break;
         }
     };
 
     function easyMode() {
         slp = 1000;
-        console.log('easy mode');
     }
     function mediumMode() {
         slp = 300;
-        console.log('medium mode');
     }
     function hardMode() {
         slp = 100;
