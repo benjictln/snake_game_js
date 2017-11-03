@@ -5,7 +5,7 @@ window.onload = function () {
     var dir = 0;    //where the snake is heading 0:right 1:down 2:left 3:up
     var canvas; //the size of the main window where the snake will move
     var ctx;    //the snake
-    var slp = 300; //the refreshing rate (in ms)
+    var slp = 100; //the refreshing rate (in ms)
     var snake = new Array();
     var pos_x;
     var pos_y;
@@ -23,12 +23,12 @@ window.onload = function () {
     var posa_y;
     var bigger_snake = false; //should the last element of snake move? (ie same length)
 
-    function init_keys() {
+    /*function init_keys() {
         document.getElementById("up").addEventListener("click", moveUp);
         document.getElementById("down").addEventListener("click", moveDown);
         document.getElementById("left").addEventListener("click", moveLeft);
         document.getElementById("right").addEventListener("click", moveRight);
-    }
+    }*/
 
     function init() {
         canvas = document.createElement('canvas');
@@ -130,7 +130,7 @@ window.onload = function () {
         }
     }
 
-    init_keys();
+    //init_keys();  now useless
     init();
     start_game();
 
@@ -154,4 +154,26 @@ window.onload = function () {
         dir = 0;
         //console.log('moveright')
     }
+
+    var body = document.querySelector('body');
+    body.onkeydown = function (e) {
+        var nb_key = e.keyCode;
+        if ( nb_key == 37 || nb_key == 38 || nb_key == 39 || nb_key == 40) {
+            e.preventDefault();
+        }
+        switch (nb_key) {
+            case 37:
+                moveLeft();
+                break;
+            case 38:
+                moveUp();
+                break;
+            case 39:
+                moveRight();
+                break;
+            case 40:
+                moveDown();
+                break;
+        }
+    };
 }
