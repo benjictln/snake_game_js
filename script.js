@@ -27,6 +27,8 @@ window.onload = function () {
     var bigger_snake = false; //should the last element of snake move? (ie same length)
     var nb_rooten_apple = 0;
     var rooten_apple_array = new Array();
+    var alive = true;
+
     /*function init_keys() {
         document.getElementById("up").addEventListener("click", moveUp);
         document.getElementById("down").addEventListener("click", moveDown);
@@ -62,7 +64,7 @@ window.onload = function () {
         if (!bigger_snake) {
             ctx.fillStyle = color_bg;   //we erase the end of the snake
             var k;
-            var not_seen = true;
+            var not_seen = true;   //to ensure the snake can walk across his body without having a part becoming invisible
             for (k=0; k< lgth_snake-1; k++) {
                 if (snake[k][0] == snake[lgth_snake-1][0] && snake[k][1] == snake[lgth_snake-1][1]) not_seen = false;
             }
@@ -79,8 +81,6 @@ window.onload = function () {
             }
             lgth_snake++;
         }
-        var i;
-
         switch (dir) { //we treat the head differently
             case 0:
                 snake[0] = [ snake[0][0] + mov_x, snake[0][1] ];
@@ -109,6 +109,8 @@ window.onload = function () {
         }
         ctx.fillStyle = color_snake;
         ctx.fillRect(snake[0][0],snake[0][1],lg_x,lg_y);  //we draw the new head of the snake
+        var dead = isRootenAppleThere(snake[0]);
+        if (dead) alive = false;
     }
 
     function create_apple() {
@@ -135,6 +137,7 @@ window.onload = function () {
         ctx.fillStyle = color_rotten_apple;
         ctx.fillRect(posr_x,posr_y,lg_x,lg_y);
         nb_rooten_apple++;
+        rooten_apple_array.push([posr_x,posr_y]);
     }
 
     function create_rooten_apple() {
@@ -161,14 +164,14 @@ window.onload = function () {
     var i = 0;
 
     async function start_game() {
-        while (i<100000*lg_box_x) {
+        while (alive) {
             if (!apple) create_apple();
             if ((posa_x == snake[0][0]) && (posa_y == snake[0][1])) apple_eaten();
             update_snake();
-            i++;
             await sleep(slp);
             create_rooten_apple();
         }
+        console.log("Game over");
     }
 
     //init_keys();  now useless
@@ -237,4 +240,11 @@ window.onload = function () {
         slp = 30;
     }
 
+
+    function isRootenAppleThere(x) {
+        for (k=0; k < nb_rooten_apple; k++) {
+            if (rooten_apple_array[k][0] == x[0] && rooten_apple_array[k][1] == x[1]) return true;
+        }
+        return false;
+    }
 }
